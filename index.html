@@ -1,0 +1,353 @@
+import os
+os.makedirs('/mnt/agents/output', exist_ok=True)
+
+html = r'''<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr / Editor — مونتاج فيديو احترافي</title>
+<meta name="description" content="بورتفوليو مونتير فيديو محترف — مونتاج، موشن، ترجمة عربية، ومحتوى علاجي وفيزيائي.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070d1a;
+  --bg2:#0b1526;
+  --card:#101d33;
+  --copper:#d4a05a;
+  --copper2:#b8783a;
+  --copper3:#f0c98f;
+  --ink:#eef2f8;
+  --muted:#9aa7bd;
+  --line:rgba(212,160,90,.18);
+  --glow:rgba(212,160,90,.35);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Tajawal','Cairo',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  overflow-x:hidden;
+  line-height:1.7;
+}
+::selection{background:var(--copper);color:#0a1120}
+
+/* ---------- ambient background ---------- */
+.bg-fx{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(700px 400px at 85% -5%, rgba(212,160,90,.12), transparent 60%),
+    radial-gradient(800px 500px at 0% 100%, rgba(60,100,180,.15), transparent 60%),
+    linear-gradient(180deg,var(--bg),var(--bg2));
+}
+.bg-fx::after{content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(212,160,90,.04) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(212,160,90,.04) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse at 50% 20%,black 30%,transparent 75%);
+}
+
+/* ---------- nav ---------- */
+nav{position:fixed;top:0;right:0;left:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 5vw;
+  background:rgba(7,13,26,.72);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
+.brand img{width:44px;height:44px;border-radius:50%;object-fit:cover;
+  border:2px solid var(--copper);box-shadow:0 0 18px var(--glow)}
+.brand b{font-weight:900;font-size:1.05rem;letter-spacing:.5px}
+.brand span{display:block;font-size:.7rem;color:var(--copper);font-weight:500;letter-spacing:2px}
+.nav-links{display:flex;gap:26px;align-items:center}
+.nav-links a{color:var(--muted);text-decoration:none;font-weight:500;font-size:.95rem;transition:.25s}
+.nav-links a:hover{color:var(--copper3)}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--copper),var(--copper2));
+  color:#131107;font-weight:800;text-decoration:none;
+  padding:10px 22px;border-radius:999px;font-size:.92rem;
+  box-shadow:0 4px 20px var(--glow);
+  transition:transform .2s, box-shadow .2s;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px var(--glow)}
+.btn.ghost{background:transparent;color:var(--copper3);border:1px solid var(--copper);box-shadow:none}
+.btn.ghost:hover{background:rgba(212,160,90,.08)}
+@media(max-width:760px){.nav-links a:not(.btn){display:none}}
+
+/* ---------- hero ---------- */
+.hero{min-height:100vh;display:grid;grid-template-columns:1.1fr .9fr;
+  align-items:center;gap:5vw;padding:120px 6vw 60px;position:relative}
+@media(max-width:900px){.hero{grid-template-columns:1fr;text-align:center;padding-top:110px}}
+.kicker{display:inline-block;padding:6px 18px;border:1px solid var(--line);
+  border-radius:999px;color:var(--copper3);font-size:.82rem;font-weight:500;
+  letter-spacing:1px;margin-bottom:22px;background:rgba(212,160,90,.06)}
+.hero h1{font-family:'Cairo',sans-serif;font-weight:900;
+  font-size:clamp(2.2rem,5vw,3.9rem);line-height:1.25;margin-bottom:18px}
+.hero h1 .grad{background:linear-gradient(120deg,var(--copper3),var(--copper) 45%,var(--copper2));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);font-size:1.1rem;max-width:560px;margin-bottom:34px}
+@media(max-width:900px){.hero p{margin-inline:auto}}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+@media(max-width:900px){.hero-cta{justify-content:center}}
+.hero-logo{position:relative;display:grid;place-items:center}
+.hero-logo img{width:min(420px,80vw);border-radius:50%;
+  border:3px solid transparent;
+  background:linear-gradient(var(--bg2),var(--bg2)) padding-box,
+             linear-gradient(135deg,var(--copper3),var(--copper2),#3b6bd6) border-box;
+  box-shadow:0 0 70px rgba(212,160,90,.28), 0 0 140px rgba(59,107,214,.18);
+  animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-16px) rotate(1deg)}}
+.ring{position:absolute;border:1px dashed rgba(212,160,90,.25);border-radius:50%;
+  animation:spin 30s linear infinite}
+.ring.r1{width:min(500px,92vw);height:min(500px,92vw)}
+.ring.r2{width:min(580px,105vw);height:min(580px,105vw);animation-direction:reverse;animation-duration:45s}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- stats ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;
+  padding:0 6vw;margin:-10px 0 90px}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:26px 18px;text-align:center;transition:.3s}
+.stat:hover{transform:translateY(-5px);border-color:var(--copper);box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.stat b{display:block;font-family:'Cairo';font-size:2rem;font-weight:900;
+  background:linear-gradient(120deg,var(--copper3),var(--copper2));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{color:var(--muted);font-size:.9rem}
+
+/* ---------- sections ---------- */
+section{padding:90px 6vw}
+.sec-head{text-align:center;margin-bottom:56px}
+.sec-head small{color:var(--copper);letter-spacing:3px;font-weight:700;font-size:.8rem}
+.sec-head h2{font-family:'Cairo';font-weight:900;font-size:clamp(1.8rem,3.5vw,2.6rem);margin-top:8px}
+.sec-head p{color:var(--muted);max-width:620px;margin:12px auto 0}
+
+/* ---------- services ---------- */
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px}
+.svc{background:linear-gradient(160deg,var(--card),#0c1626);border:1px solid var(--line);
+  border-radius:22px;padding:34px 26px;position:relative;overflow:hidden;transition:.3s}
+.svc::before{content:"";position:absolute;top:-40px;left:-40px;width:140px;height:140px;
+  border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 70%);opacity:0;transition:.4s}
+.svc:hover{transform:translateY(-6px);border-color:var(--copper)}
+.svc:hover::before{opacity:1}
+.svc .ico{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;
+  background:rgba(212,160,90,.1);border:1px solid var(--line);margin-bottom:20px}
+.svc .ico svg{width:28px;height:28px;stroke:var(--copper3)}
+.svc h3{font-weight:800;font-size:1.15rem;margin-bottom:8px}
+.svc p{color:var(--muted);font-size:.92rem}
+
+/* ---------- portfolio ---------- */
+.works{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.work{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--line);
+  background:var(--card);aspect-ratio:16/10;display:block;text-decoration:none;
+  transition:.35s}
+.work:hover{transform:translateY(-6px) scale(1.01);border-color:var(--copper);
+  box-shadow:0 18px 50px rgba(0,0,0,.5), 0 0 40px var(--glow)}
+.work .thumb{position:absolute;inset:0;display:grid;place-items:center;
+  background:radial-gradient(circle at 30% 30%,rgba(212,160,90,.14),transparent 60%),
+             linear-gradient(160deg,#0e1a2e,#0a1322)}
+.play{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--copper),var(--copper2));
+  box-shadow:0 0 40px var(--glow);transition:.3s}
+.play svg{width:28px;height:28px;fill:#131107;margin-right:-3px}
+.work:hover .play{transform:scale(1.12)}
+.work .meta{position:absolute;bottom:0;right:0;left:0;padding:20px;
+  background:linear-gradient(transparent,rgba(5,10,20,.92) 45%)}
+.work .meta h3{font-weight:800;font-size:1.05rem}
+.work .meta span{color:var(--copper3);font-size:.82rem}
+.work .tag{position:absolute;top:16px;right:16px;background:rgba(7,13,26,.75);
+  border:1px solid var(--line);color:var(--copper3);font-size:.75rem;font-weight:700;
+  padding:5px 14px;border-radius:999px;backdrop-filter:blur(6px)}
+
+.drive-banner{margin-top:36px;text-align:center;padding:38px 26px;border-radius:22px;
+  border:1px dashed var(--copper);background:rgba(212,160,90,.05)}
+.drive-banner h3{font-family:'Cairo';font-weight:900;font-size:1.3rem;margin-bottom:8px}
+.drive-banner p{color:var(--muted);margin-bottom:20px}
+
+/* ---------- about ---------- */
+.about{display:grid;grid-template-columns:.85fr 1.15fr;gap:5vw;align-items:center}
+@media(max-width:900px){.about{grid-template-columns:1fr}}
+.about img{width:min(360px,75vw);border-radius:26px;border:1px solid var(--line);
+  box-shadow:0 20px 60px rgba(0,0,0,.5), 0 0 50px var(--glow);display:block;margin:auto}
+.about h2{font-family:'Cairo';font-weight:900;font-size:clamp(1.7rem,3vw,2.4rem);margin-bottom:16px}
+.about p{color:var(--muted);margin-bottom:14px}
+.about b{color:var(--copper3)}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.chips span{border:1px solid var(--line);background:rgba(212,160,90,.06);
+  color:var(--copper3);font-size:.82rem;font-weight:700;padding:7px 16px;border-radius:999px}
+
+/* ---------- footer / contact ---------- */
+footer{border-top:1px solid var(--line);padding:70px 6vw 34px;text-align:center;
+  background:linear-gradient(180deg,transparent,rgba(212,160,90,.05))}
+footer .ig{display:inline-flex;align-items:center;gap:12px;text-decoration:none;
+  background:linear-gradient(45deg,#f58529,#dd2a7b 55%,#8134af);
+  color:#fff;font-weight:800;padding:14px 34px;border-radius:999px;font-size:1.05rem;
+  box-shadow:0 8px 30px rgba(221,42,123,.35);transition:.25s;margin:18px 0 8px}
+footer .ig:hover{transform:translateY(-3px) scale(1.02)}
+footer .ig svg{width:22px;height:22px;fill:#fff}
+footer .mail{color:var(--muted);text-decoration:none;font-size:.95rem}
+footer .mail:hover{color:var(--copper3)}
+footer small{display:block;color:var(--muted);margin-top:34px;font-size:.82rem;
+  border-top:1px solid var(--line);padding-top:22px}
+
+.reveal{opacity:0;transform:translateY(34px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<div class="bg-fx"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="brand" href="#home">
+    <img src="logo.jpg" alt="Logo">
+    <div><b>Dr / Editor</b><span>MUNTAGE &amp; ELAJ AL-TABAIE</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="#services">الخدمات</a>
+    <a href="#works">الأعمال</a>
+    <a href="#about">عنّي</a>
+    <a class="btn" href="https://www.instagram.com/anatomyof.edits111?stkn=OW1yZjF0ZHVmNnZ0" target="_blank" rel="noopener">تواصل معايا</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="home">
+  <div>
+    <span class="kicker">Video Editor &nbsp;•&nbsp; Physio Content</span>
+    <h1>مونتاج يخلّي الفيديو<br><span class="grad">يتحوّل لقصة ما تتنساش</span></h1>
+    <p>أنا Dr / Editor — مونتير فيديو محترف بخلفية فيزيائية علمية. بشتغل مونتاج، موشن جرافيك، ترجمة عربية بستايلات احترافية، ومحتوى طبي وعلاجي يوصل المعلومة صح وبالشكل اللي يشد العين.</p>
+    <div class="hero-cta">
+      <a class="btn" href="https://drive.google.com/drive/folders/1PCUGhV0zpUB68Px_8S2aWeItw_qh81pN" target="_blank" rel="noopener">شوف شغلي على Drive</a>
+      <a class="btn ghost" href="https://www.instagram.com/anatomyof.edits111?stkn=OW1yZjF0ZHVmNnZ0" target="_blank" rel="noopener">@anatomyof.edits111</a>
+    </div>
+  </div>
+  <div class="hero-logo">
+    <div class="ring r1"></div>
+    <div class="ring r2"></div>
+    <img src="logo.jpg" alt="Muntaj & Elaj Al-Tabaie Logo">
+  </div>
+</header>
+
+<!-- STATS -->
+<div class="stats reveal">
+  <div class="stat"><b>+100</b><span>فيديو تم تسليمه</span></div>
+  <div class="stat"><b>2</b><span>تخصص — مونتاج وفيزيو</span></div>
+  <div class="stat"><b>6</b><span>ستايلات ترجمة عربية</span></div>
+  <div class="stat"><b>24h</b><span>متوسط زمن التسليم</span></div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="sec-head reveal">
+    <small>MY SERVICES</small>
+    <h2>اللي بقدّمه</h2>
+    <p>كل اللي محتاجه عشان فيديوهاتك توصل للمستوى الاحترافي — من القص لحد التصدير.</p>
+  </div>
+  <div class="services">
+    <div class="svc reveal">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/></svg></div>
+      <h3>مونتاج احترافي</h3>
+      <p>قص وترتيب، إيقاع سينمائي، تصحيح ألوان، وتنظيف صوت — فيديو جاهز للنشر على أي منصة.</p>
+    </div>
+    <div class="svc reveal">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></div>
+      <h3>ترجمة عربية بستايلات</h3>
+      <p>6 ستايلات احترافية: نيون، تدرج، توهج، سينمائي، بوكس، وهايلايت — بخطوط Cairo وTajawal وNoto Sans.</p>
+    </div>
+    <div class="svc reveal">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></div>
+      <h3>ساوند ديزاين</h3>
+      <p>ميكساج صوت، مؤثرات، وموسيقى خلفية (أصوات حلال فقط) تناسب روح الفيديو.</p>
+    </div>
+    <div class="svc reveal">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+      <h3>محتوى طبي وعلاجي</h3>
+      <p>محتوى فيزيو وعلاج طبيعي مبسّط ودقيق علميًا — تحويل المعلومة الطبية لفيديو واضح وجذاب.</p>
+    </div>
+    <div class="svc reveal">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div>
+      <h3>ريلز وشورتس</h3>
+      <p>فيديوهات قصيرة بخطاف قوي أول ثانيتين، مثالية للنمو على إنستجرام وتيك توك ويوتيوب.</p>
+    </div>
+    <div class="svc reveal">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg></div>
+      <h3>موشن جرافيك</h3>
+      <p>انترو، لوجو موشن، أسماء وألقاب متحركة، وعناصر بصرية ترفع مستوى البراند.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section id="works">
+  <div class="sec-head reveal">
+    <small>PORTFOLIO</small>
+    <h2>أحدث الشغل</h2>
+    <p>كل الفيديوهات متجمعة على Google Drive — اضغط على أي عمل عشان تشوفه كامل.</p>
+  </div>
+  <div class="works">
+    <a class="work reveal" href="https://drive.google.com/drive/folders/1PCUGhV0zpUB68Px_8S2aWeItw_qh81pN" target="_blank" rel="noopener">
+      <div class="thumb"><div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <span class="tag">مونتاج سينمائي</span>
+      <div class="meta"><h3>أحدث الأعمال — Drive</h3><span>اضغط للمشاهدة على Google Drive</span></div>
+    </a>
+    <a class="work reveal" href="https://www.instagram.com/anatomyof.edits111?stkn=OW1yZjF0ZHVmNnZ0" target="_blank" rel="noopener">
+      <div class="thumb"><div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <span class="tag">ريلز</span>
+      <div class="meta"><h3>ريلز إنستجرام</h3><span>@anatomyof.edits111</span></div>
+    </a>
+    <a class="work reveal" href="https://drive.google.com/drive/folders/1PCUGhV0zpUB68Px_8S2aWeItw_qh81pN" target="_blank" rel="noopener">
+      <div class="thumb"><div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <span class="tag">محتوى طبي</span>
+      <div class="meta"><h3>محتوى فيزيو وعلاج طبيعي</h3><span>اضغط للمشاهدة على Google Drive</span></div>
+    </a>
+  </div>
+  <div class="drive-banner reveal">
+    <h3>كل الفيديوهات في مكان واحد</h3>
+    <p>البورتفوليو الكامل موجود على Google Drive — مشاهدة مباشرة بدون تحميل.</p>
+    <a class="btn" href="https://drive.google.com/drive/folders/1PCUGhV0zpUB68Px_8S2aWeItw_qh81pN" target="_blank" rel="noopener">افتح مجلد Drive</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about">
+    <div class="reveal"><img src="logo.jpg" alt="Dr / Editor"></div>
+    <div class="reveal">
+      <h2>مين Dr / Editor؟</h2>
+      <p>أنا <b>Muntaj &amp; Elaj Al-Tabaie</b> — مونتير فيديو ودكتور فيزيو. الجمع بين المونتاج والخلفية العلمية الطبية خلّاني أقدر أنتج محتوى طبي وعلاجي دقيق ومبسّط، وفيديوهات عامة بمستوى سينمائي.</p>
+      <p>بشتغل بإيقاع سريع، اهتمام كبير بالتفاصيل، وتسليم في الموعد — الفيديو عندي مش مجرد قص وتركيب، ده <b>قصة بتتروى صح</b>.</p>
+      <div class="chips">
+        <span>Premiere Pro</span><span>After Effects</span><span>DaVinci Resolve</span>
+        <span>ترجمة عربية احترافية</span><span>تلوين</span><span>ساوند ديزاين</span><span>محتوى طبي</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <h2 style="font-family:'Cairo';font-weight:900;font-size:1.8rem">خلّينا نشتغل مع بعض</h2>
+  <p style="color:var(--muted)">ابعتلي على إنستجرام وهرد عليك في أسرع وقت.</p>
+  <a class="ig" href="https://www.instagram.com/anatomyof.edits111?stkn=OW1yZjF0ZHVmNnZ0" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 3.1a6.7 6.7 0 1 0 0 13.4 6.7 6.7 0 0 0 0-13.4zm0 11a4.3 4.3 0 1 1 0-8.6 4.3 4.3 0 0 1 0 8.6zm6.9-11.3a1.6 1.6 0 1 1-3.2 0 1.6 1.6 0 0 1 3.2 0z"/></svg>
+    anatomyof.edits111
+  </a>
+  <div><a class="mail" href="mailto:youremail@gmail.com">youremail@gmail.com</a></div>
+  <small>© 2026 Muntaj &amp; Elaj Al-Tabaie — Dr / Editor. كل الحقوق محفوظة.</small>
+</footer>
+
+<script>
+// scroll reveal
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
+'''
+
+with open('/mnt/agents/output/portfolio.html','w',encoding='utf-8') as f:
+    f.write(html)
+print('done', len(html))
